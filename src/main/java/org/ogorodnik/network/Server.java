@@ -15,10 +15,10 @@ public class Server {
         //listen
 
         while (!isOver) {
-            Socket socket = serverSocket.accept();
 
             byte[] serverBuffer = new byte[50];
-            try (InputStream inputStream = socket.getInputStream();
+            try (Socket socket = serverSocket.accept();
+                 InputStream inputStream = socket.getInputStream();
                  OutputStream outputStream = socket.getOutputStream()) {
                 int serverCount = inputStream.read(serverBuffer);
                 String messageFromClient = "Echo " + new String(serverBuffer, 0, serverCount);
