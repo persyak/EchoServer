@@ -9,12 +9,12 @@ public class AlexandraClient {
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket("127.0.0.1", 3000);
 
-        OutputStream outputStream = socket.getOutputStream();
-        outputStream.write("privet".getBytes());
-
-        byte[] clientBuffer = new byte[50];
-        InputStream inputStream = socket.getInputStream();
-        int clientCount = inputStream.read(clientBuffer);
-        System.out.println(new String(clientBuffer, 0, clientCount));
+        try (OutputStream outputStream = socket.getOutputStream();
+             InputStream inputStream = socket.getInputStream()) {
+            outputStream.write("privet".getBytes());
+            byte[] clientBuffer = new byte[50];
+            int clientCount = inputStream.read(clientBuffer);
+            System.out.println(new String(clientBuffer, 0, clientCount));
+        }
     }
 }

@@ -8,18 +8,22 @@ import java.net.Socket;
 
 public class Server {
     public static void main(String[] args) throws IOException {
+
+        boolean isOver = false;
+
         ServerSocket serverSocket = new ServerSocket(3000);
         //listen
-        while (true) {
+
+        while (!isOver) {
             Socket socket = serverSocket.accept();
 
             byte[] serverBuffer = new byte[50];
-            InputStream inputStream = socket.getInputStream();
-            int serverCount = inputStream.read(serverBuffer);
-            String messageFromClient = "Echo " + new String(serverBuffer, 0, serverCount);
-
-            OutputStream outputStream = socket.getOutputStream();
-            outputStream.write(messageFromClient.getBytes());
+            try (InputStream inputStream = socket.getInputStream();
+                 OutputStream outputStream = socket.getOutputStream()) {
+                int serverCount = inputStream.read(serverBuffer);
+                String messageFromClient = "Echo " + new String(serverBuffer, 0, serverCount);
+                outputStream.write(messageFromClient.getBytes());
+            }
         }
     }
 }
